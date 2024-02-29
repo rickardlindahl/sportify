@@ -6,7 +6,9 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@sportify/kafka": "workspace:*",
+    "elysia": "latest",
+    "kafkajs": "^2.2.4"
   },
   "devDependencies": {
     "bun-types": "latest"
