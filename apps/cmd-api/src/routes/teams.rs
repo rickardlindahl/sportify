@@ -6,17 +6,15 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-fn get_kafka_producer() -> FutureProducer {
-    let broker = std::env::var("KAFKA_BROKER").unwrap();
-    let username = std::env::var("KAFKA_USERNAME").unwrap();
-    let password = std::env::var("KAFKA_PASSWORD").unwrap();
+use crate::config::Config;
 
+fn get_kafka_producer(config: &Config) -> FutureProducer {
     let producer: FutureProducer = ClientConfig::new()
-        .set("bootstrap.servers", broker)
+        .set("bootstrap.servers", &config.kafka_broker)
         .set("security.protocol", "SASL_SSL")
         .set("sasl.mechanisms", "SCRAM-SHA-256")
-        .set("sasl.username", username)
-        .set("sasl.password", password)
+        .set("sasl.username", &config.kafka_username)
+        .set("sasl.password", &config.kafka_password)
         .create()
         .expect("Producer creation error");
 
@@ -28,20 +26,21 @@ fn get_timestamp_miliseconds(now: SystemTime) -> i64 {
     (duration_since_epoch.as_secs() as i64) * 1000 + i64::from(duration_since_epoch.subsec_millis())
 }
 
-pub async fn add_team(extract::Json(payload): extract::Json<Team>) -> (StatusCode, Json<Response>) {
+pub async fn add_team(
+    extract::State(config): extract::State<Config>,
+    extract::Json(payload): extract::Json<Team>,
+) -> (StatusCode, Json<Response>) {
     let id = Uuid::new_v4();
+    let id_string = id.to_string();
 
     let team_with_id = TeamWithId { id, data: payload };
 
-    let producer = get_kafka_producer();
+    let producer = get_kafka_producer(&config);
 
     let buffer = serde_json::to_string(&team_with_id).unwrap();
 
-    let topic = std::env::var("KAFKA_ADD_TEAM_TOPIC").unwrap();
-    let key = std::env::var("KAFKA_ADD_TEAM_KEY").unwrap();
-
-    let record = FutureRecord::to(&topic)
-        .key(&key)
+    let record = FutureRecord::to(&config.kafka_topic_teams)
+        .key(&id_string)
         .payload(buffer.as_bytes())
         .timestamp(get_timestamp_miliseconds(SystemTime::now()));
 
