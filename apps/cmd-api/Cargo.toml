@@ -6,6 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+sportify-kafka = { path = "../../libs/kafka" }
 axum = "0.7.4"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -13,5 +14,4 @@ tokio = { version = "1.0", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 uuid = { version = "1.7.0", features = ["v4", "serde"] }
-rdkafka = { version = "0.36.2", features = ["cmake-build", "ssl-vendored"] }
 dotenv = "0.15.0"

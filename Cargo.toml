@@ -1,6 +1,7 @@
 [workspace]
 
 members = [
-  "apps/cmd-api"
+  "apps/cmd-api",
+  "libs/kafka",
 ]
 

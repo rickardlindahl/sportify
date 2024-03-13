@@ -152,9 +152,9 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "dotenv",
- "rdkafka",
  "serde",
  "serde_json",
+ "sportify-kafka",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -842,6 +842,13 @@ checksum = "05ffd9c0a93b7543e062e759284fcf5f5e3b098501104bfbdde4d404db792871"
 dependencies = [
  "libc",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "sportify-kafka"
+version = "0.1.0"
+dependencies = [
+ "rdkafka",
 ]
 
 [[package]]
