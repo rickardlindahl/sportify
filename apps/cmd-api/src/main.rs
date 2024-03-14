@@ -13,7 +13,7 @@ async fn main() {
     let app_config = config::Config::new();
 
     let app = Router::new()
-        .route("/api/teams", post(routes::teams::add_team))
+        .route("/api/teams", post(routes::teams::create_team))
         .with_state(app_config);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();

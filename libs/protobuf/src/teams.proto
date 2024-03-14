@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package protobuf.teams;
+
+message CreateTeam {
+    string id = 1;
+    string name = 2;
+    string country = 3;
+    string city = 4;
+    string stadium = 5;
+    uint32 founded = 6;
+}
