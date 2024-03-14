@@ -3,5 +3,6 @@
 members = [
   "apps/cmd-api",
   "libs/kafka",
+  "libs/protobuf",
 ]
 
